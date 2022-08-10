@@ -2,3 +2,4 @@ scrapy.cfg
 .idea
 venv
 env
+images
