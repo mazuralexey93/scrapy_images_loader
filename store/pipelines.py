@@ -5,10 +5,16 @@
 
 
 # useful for handling different item types with a single interface
+import hashlib
+
+
 import scrapy
 from pymongo import MongoClient
 from itemadapter import ItemAdapter
 from scrapy.pipelines.images import ImagesPipeline
+from scrapy.utils.python import to_bytes
+
+from store.settings import IMAGES_STORE
 
 
 class StorePipeline:
@@ -42,3 +48,8 @@ class CastoramaImagesPipeline(ImagesPipeline):
     def item_completed(self, results, item, info):
         item['images'] = [itm[1] for itm in results if itm[0]]
         return item
+
+    def file_path(self, request, response=None, info=None, *, item):
+        img_name = item['name']
+        image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()
+        return f'full/{img_name}/{image_guid}.jpg'
