@@ -25,15 +25,8 @@ class CastoramaSpider(scrapy.Spider):
     def parse_ads(self, response: HtmlResponse):
         loader = ItemLoader(item=StoreItem(), response=response)
         loader.add_xpath('name', "//h1/text()")
-        # loader.add_xpath('price', "//span[@class = 'regular-price']//text()") #!  ['\n                    ', '31 840', 'руб. ', '                ', '\n                    ', '31 840', 'руб. ', '                ']
-
         loader.add_xpath('price', "//span[@class='regular-price']/span/span/span//text()")
         loader.add_xpath('images', "//div[@class='js-zoom-container']/img/@data-src")
+        loader.add_xpath('specification', "//div[contains(@class, 'product-specifications')]//dt//text() | //div[contains(@class, 'product-specifications')]//dd//text() ")
         loader.add_value('url', response.url)
         yield loader.load_item()
-
-        # name = response.xpath("//h1/text()").get()
-        # price = response.xpath("//span[@class = 'regular-price']//text()").getall()[1:3]
-        # images = response.xpath("//div[@class='js-zoom-container']/img/@data-src").getall()
-        # url = response.url
-        # yield StoreItem(name=name, price=price, images=images, url=url)

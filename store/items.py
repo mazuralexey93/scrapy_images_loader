@@ -21,5 +21,6 @@ class StoreItem(scrapy.Item):
     name = scrapy.Field(output_processor=TakeFirst())
     price = scrapy.Field(input_processor=MapCompose(process_price), output_processor=TakeFirst())
     url = scrapy.Field(output_processor=TakeFirst())
+    specification = scrapy.Field()
     images = scrapy.Field()
     _id = scrapy.Field()
